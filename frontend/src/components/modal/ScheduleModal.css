@@ -1,0 +1,83 @@
+/* 모달 전체 화면을 덮는 어두운 배경 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 모달 창 스타일 */
+.modal {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 모달 헤더 */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.modal-header h2 {
+  font-size: 1.5em;
+  text-align: center;
+  flex-grow: 1
+}
+
+/* 모달 창 닫기 버튼 */
+.modal-header button {
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+/* 모달 내용 스타일 */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+/* 모달 하단 버튼 */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 모달 저장 버튼 */
+.modal-footer button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-right: 10px;
+}
+
+.modal-footer button:hover {
+  background-color: #0056b3;
+}

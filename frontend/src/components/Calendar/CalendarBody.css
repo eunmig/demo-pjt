@@ -1,0 +1,34 @@
+.calendar-body {
+  padding: 10px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7열 그리드 */
+}
+
+.calendar-cell {
+  border: 1px solid #e0e0e0; /* 셀 테두리 */
+  padding: 5px;
+  text-align: center;
+}
+
+.calendar-event {
+  background-color: #f0c674; /* 이벤트 있는 날의 배경색 */
+  padding: 3px;
+  border-radius: 3px;
+  margin-top: 5px;
+}
+
+/* 지난달과 다음달 날짜에 적용할 스타일 */
+.prev-month, .next-month {
+  color: #ccc; /* 연한 회색으로 표시 */
+}
+
+.event-indicator {
+  width: 8px;
+  height: 8px;
+  background-color: rgba(255, 196, 0, 0.747); /* 점의 색상 */
+  border-radius: 50%; /* 원 형태로 */
+  margin: 5px auto; /* 수직 중앙 정렬 */
+}
