@@ -1,3 +1,4 @@
+// EventDetailModal.js
 import React, { useEffect, useState } from 'react';
 
 const EventDetailModal = ({ isOpen, event, onClose, onUpdate, onDelete }) => {
@@ -10,9 +11,19 @@ const EventDetailModal = ({ isOpen, event, onClose, onUpdate, onDelete }) => {
 
   if (!isOpen) return null;
 
+  const handleChange = (field, value) => {
+    setEditedEvent((prev) => ({ ...prev, [field]: value }));
+  };
+
   // 저장 버튼 클릭 시 업데이트
   const handleSave = () => {
     onUpdate(editedEvent);
+    onClose();
+  };
+
+  // 삭제 버튼 클릭 시
+  const handleDelete = () => {
+    onDelete(editedEvent.id);
     onClose();
   };
 
@@ -28,17 +39,17 @@ const EventDetailModal = ({ isOpen, event, onClose, onUpdate, onDelete }) => {
             type="text"
             name="title"
             value={editedEvent.title}
-            onChange={(e) => setEditedEvent({ ...editedEvent, title: e.target.value })}
+            onChange={(e) => handleChange('title', e.target.value)}
           />
           <textarea
             name="description"
             value={editedEvent.description}
-            onChange={(e) => setEditedEvent({ ...editedEvent, description: e.target.value })}
+            onChange={(e) => handleChange('description', e.target.value)}
           />
         </div>
         <div className="modal-footer">
           <button onClick={handleSave}>수정</button>
-          <button onClick={() => onDelete(event.id)}>삭제</button>
+          <button onClick={handleDelete}>삭제</button>
         </div>
       </div>
     </div>

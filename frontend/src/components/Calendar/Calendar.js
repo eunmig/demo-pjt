@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { fetchEvents, updateEvent, deleteEvent, createEvent } from "../../api/events";
 import useCalendar from "../../hooks/useCalendar";
 import CalendarHeader from "./CalendarHeader";
 import CalendarBody from "./CalendarBody";
 import ScheduleModal from "../modal/ScheduleModal";
 import DateDetailModal from "../modal/DateDetailModal";
-import EventDetailModal from "../modal/EventDetailModal"; // 추가된 모달
+import EventDetailModal from "../modal/EventDetailModal";
 
 const Calendar = () => {
-  const { events, currentMonth, goToNextMonth, goToPreviousMonth, addEvent, updateEvent, deleteEvent } = useCalendar();
+  const [events, setEvents] = useState([]);
+  const { currentMonth, goToNextMonth, goToPreviousMonth } = useCalendar();
   
   // 모달, 선택 날짜 상태 관리
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);        // 일정 추가 모델 상태
@@ -17,9 +19,24 @@ const Calendar = () => {
   const [selectedEvents, setSelectedEvents] = useState([]);   // 선택 된 날짜의 일정 목록
   const [selectedEvent, setSelectedEvent] = useState(null);   // 선택된 단일 이벤트 상태
 
-  // 날짜 클릭 시 이벤트 상세 모달 열기
+  // 마운트될 때 API에서 일정 목록 불러오기
+  useEffect(() => {
+    const loadEvents = async () => {
+      const eventList = await fetchEvents();
+      setEvents(eventList);
+    };
+
+    loadEvents();
+  }, []);
+
+  // 날짜 클릭 시 일정 필터링
   const handleDateClick = (date) => {
-    const dateEvents = events.filter(event => event.date === date);
+    // 선택한 날짜의 이벤트 필터링
+    const dateEvents = (events && Array.isArray(events)) ? events.filter(event => {
+      const eventDate = new Date(event.date).toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+      return eventDate === date;
+    }) : [];
+    
     setSelectedDate(date);
     setSelectedEvents(dateEvents);
     setIsDateDetailModalOpen(true);
@@ -27,7 +44,7 @@ const Calendar = () => {
 
   // 일정 추가 모달 열기
   const handleOpenScheduleModal = () => {
-    setIsDateDetailModalOpen(false); // 이벤트 상세 모달 닫기
+    setIsDateDetailModalOpen(false);  // 이벤트 상세 모달 닫기
     setIsScheduleModalOpen(true);     // 일정 추가 모달 열기
   };
 
@@ -38,24 +55,27 @@ const Calendar = () => {
     setIsEventDetailModalOpen(false); // 이벤트 디테일 모달 닫기
     setSelectedDate(null);
     setSelectedEvents([]);
-    setSelectedEvent(null); // 선택된 이벤트 초기화
+    setSelectedEvent(null);           // 선택된 이벤트 초기화
   };
 
   // 일정 저장
-  const handleSaveSchedule = (newSchedule) => {
-    addEvent(newSchedule);
+  const handleSaveSchedule = async (newSchedule) => {
+    const newEvent = await createEvent(newSchedule);
+    setEvents(prevEvents => [...prevEvents, newEvent]);   // 상태 추가
     handleCloseModal();
   };
 
   // 일정 업데이트
-  const handleUpdateEvent = (updatedEvent) => {
-    updateEvent(updatedEvent);
+  const handleUpdateEvent = async (updatedEvent) => {
+    const updatedData = await updateEvent(updatedEvent.id, updatedEvent); 
+    setEvents(prevEvents => prevEvents.map(event => (event.id === updatedEvent.id ? updatedData : event))); // 상태 업데이트
     handleCloseModal();
   };
 
   // 일정 삭제
-  const handleDeleteEvent = (eventId) => {
-    deleteEvent(eventId);
+  const handleDeleteEvent = async (eventId) => {
+    await deleteEvent(eventId);
+    setEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));   // 상태 제거
     handleCloseModal();
   };
 

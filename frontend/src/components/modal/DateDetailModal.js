@@ -9,7 +9,7 @@ const DateDetailModal = ({ isOpen, onClose, events, selectedDate, onAddSchedule,
 
   if (!isOpen) return null;
 
-  // 이벤트 클릭 시 세부 정보 모달 열기
+  // 일정 클릭 시 세부 정보 모달 열기
   const handleEventClick = (event) => {
     setSelectedEvent(event);
     setIsEventDetailModalOpen(true);
