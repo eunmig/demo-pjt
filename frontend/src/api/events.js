@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000/api';
+const BASE_URL = 'http://localhost:80/api';
 
 // 모든 일정 가져오기
 export const fetchEvents = async () => {
